@@ -22,6 +22,5 @@ download_path <- path(
 multi_download(
   urls = files,
   destfiles = download_path,
-  progress = TRUE,
-  resume = TRUE
+  progress = TRUE
 )
