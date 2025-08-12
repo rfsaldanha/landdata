@@ -3,6 +3,9 @@ library(readr)
 library(curl)
 library(fs)
 
+# Normalised Difference Vegetation Index 2020-present (raster 300 m), global, 10-daily – version 2
+# https://land.copernicus.eu/en/products/vegetation/normalised-difference-vegetation-index-v2-0-300m#download
+
 # Files list
 files <- read_lines(
   "https://globalland.vito.be/download/manifest/ndvi_300m_v2_10daily_netcdf/manifest_clms_global_ndvi_300m_v2_10daily_netcdf_latest.txt"
