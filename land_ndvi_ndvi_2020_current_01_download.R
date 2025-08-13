@@ -6,8 +6,8 @@ library(curl)
 library(fs)
 library(cli)
 
-# Normalised Difference Vegetation Index 2014-2020 (raster 300 m), global, 10-daily – version 1
-# https://land.copernicus.eu/en/products/vegetation/normalized-difference-vegetation-index-300m-v1.0#download
+# Normalised Difference Vegetation Index 2020-present (raster 300 m), global, 10-daily – version 2
+# https://land.copernicus.eu/en/products/vegetation/normalised-difference-vegetation-index-v2-0-300m#download
 
 cli_alert_info("Retrieving files list...")
 # Files list
