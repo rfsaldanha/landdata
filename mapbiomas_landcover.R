@@ -1,3 +1,6 @@
+# https://gis.stackexchange.com/questions/432321/parallelize-raster-area-calculation-per-class-in-r
+# https://gis.stackexchange.com/questions/433375/calculate-area-for-raster-in-r
+
 # Packages
 library(geobr)
 library(dplyr)
