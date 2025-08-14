@@ -109,62 +109,53 @@ total_area <- function(rst, geo) {
   return(res)
 }
 
-area_geo <- function(geo_split, year, rst, land_cover_codes, con) {
-  # Compute area for each code
-  tmp_area <- map_vec(
-    .x = land_cover_codes,
-    .f = code_area,
-    rst = rst,
-    geo = geo_split,
-    .progress = FALSE
-  )
-
-  # Replace NAs with zero
-  tmp_area <- replace_na(data = tmp_area, replace = 0)
-
-  # Compute percentage
-  total_area_value <- total_area(rst = rst, geo = geo_split)
-  total_area_perc <- round(tmp_area / total_area_value * 100, 2)
-
-  # Prepare table
-  tmp_table <- tibble(
-    code_muni = geo_split$code_muni,
-    year = year,
-    code = land_cover_codes,
-    area = tmp_area,
-    perc = total_area_perc
-  )
-
-  # Write to database
-  dbWriteTable(
-    conn = con,
-    name = "land_cover",
-    value = tmp_table,
-    append = TRUE
-  )
-
-  return(TRUE)
-}
-
 # For each land cover year
 for (y in 1:nrow(land_cover_files)) {
   # Year
   year <- land_cover_files[y, 1]
 
-  cli_alert_info("Year {year}")
-
   # Read raster
   rst <- rast(land_cover_files[y, 2]$file)
 
-  res <- map(
-    .x = geo_split,
-    .f = area_geo,
-    year = year,
-    rst = rst,
-    land_cover_codes = land_cover_codes,
-    con = con,
-    .progress = TRUE
-  )
+  # For each municipality
+  for (g in 1:length(geo_split)) {
+    cli_alert_info("Year {year}, municipality {geo_split[[g]]$code_muni}")
+
+    # Compute area for each code
+    tmp_area <- map_vec(
+      .x = land_cover_codes,
+      .f = code_area,
+      rst = rst,
+      geo = geo_split[[g]],
+      .progress = TRUE
+    )
+
+    # Replace NAs with zero
+    tmp_area <- replace_na(data = tmp_area, replace = 0)
+
+    # Compute percentage
+    total_area_value <- total_area(rst = rst, geo = geo_split[[g]])
+    total_area_perc <- round(tmp_area / total_area_value * 100, 2)
+
+    # Prepare table
+    tmp_table <- tibble(
+      code_muni = geo_split[[g]]$code_muni,
+      year = year,
+      code = land_cover_codes,
+      area = tmp_area,
+      perc = total_area_perc
+    )
+
+    # Write to database
+    dbWriteTable(
+      conn = con,
+      name = "land_cover",
+      value = tmp_table,
+      append = TRUE
+    )
+
+    cli_alert_success("Done!")
+  }
 }
 
 # Check
