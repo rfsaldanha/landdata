@@ -64,7 +64,7 @@ for (l in 1:length(files_list)) {
   dest_filename <- path(dest_path, paste0("ndvi_", year, month, ".nc"))
 
   if (file_exists(dest_filename)) {
-    cli_alert_warning("File already existing. Going for next...")
+    cli_alert_warning("File already exist. Going for next...")
     next
   }
 
