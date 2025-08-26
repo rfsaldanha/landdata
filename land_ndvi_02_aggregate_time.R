@@ -82,7 +82,7 @@ for (l in 1:length(files_list)) {
     x = rst,
     mean,
     na.rm = TRUE,
-    cores = 4
+    cores = 6
   )
 
   # Write
