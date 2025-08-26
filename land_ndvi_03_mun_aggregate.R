@@ -21,6 +21,9 @@ if (dbExistsTable(con, "ndvi_max")) {
 if (dbExistsTable(con, "ndvi_min")) {
   dbRemoveTable(con, "ndvi_min")
 }
+if (dbExistsTable(con, "ndvi_sd")) {
+  dbRemoveTable(con, "ndvi_sd")
+}
 
 dbListTables(con)
 
@@ -120,22 +123,22 @@ dbExecute(
 # Export CSV file
 dbExecute(
   con,
-  "COPY (SELECT * FROM 'ndvi_mean') TO 'co_mean_mean.csv' (FORMAT 'CSV')"
+  "COPY (SELECT * FROM 'ndvi_mean') TO 'ndvi_mean.csv' (FORMAT 'CSV')"
 )
 
 dbExecute(
   con,
-  "COPY (SELECT * FROM 'ndvi_max') TO 'co_max_max.csv' (FORMAT 'CSV')"
+  "COPY (SELECT * FROM 'ndvi_max') TO 'ndvi_max.csv' (FORMAT 'CSV')"
 )
 
 dbExecute(
   con,
-  "COPY (SELECT * FROM 'ndvi_min') TO 'co_min_min.csv' (FORMAT 'CSV')"
+  "COPY (SELECT * FROM 'ndvi_min') TO 'ndvi_min.csv' (FORMAT 'CSV')"
 )
 
 dbExecute(
   con,
-  "COPY (SELECT * FROM 'ndvi_sd') TO 'co_min_sd.csv' (FORMAT 'CSV')"
+  "COPY (SELECT * FROM 'ndvi_sd') TO 'ndvi_sd.csv' (FORMAT 'CSV')"
 )
 
 # Database disconnect
