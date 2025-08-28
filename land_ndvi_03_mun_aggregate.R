@@ -70,6 +70,9 @@ agg <- function(x, fun, tb_name) {
   # Write to database
   dbWriteTable(conn = con, name = tb_name, value = res, append = TRUE)
 
+  # Remove temp files from terra
+  tmpFiles(remove = TRUE)
+
   return(TRUE)
 }
 
