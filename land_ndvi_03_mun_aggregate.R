@@ -8,8 +8,12 @@ library(purrr)
 library(exactextractr)
 library(DBI)
 library(duckdb)
+library(cli)
+
+cli_h1("NDVI Zonal routine")
 
 # Database
+cli_alert_info("Connecting to database...")
 con <- dbConnect(duckdb(), "land_ndvi.duckdb")
 
 if (dbExistsTable(con, "ndvi_mean")) {
@@ -26,6 +30,9 @@ if (dbExistsTable(con, "ndvi_sd")) {
 }
 
 dbListTables(con)
+cli_alert_success("Done!")
+
+cli_alert_info("Preparing environment...")
 
 # Folders
 monthly_data_folder <- "/media/raphaelsaldanha/seagate_ext_01/ndvi_time_agg/"
@@ -45,7 +52,7 @@ mun <- st_transform(x = mun, crs = 4326)
 agg <- function(x, fun, tb_name) {
   # Read raster and project
   rst <- rast(x)
-  rst <- project(x = rst, "EPSG:4326")
+  rst <- project(x = rst, "EPSG:4326", threads = TRUE)
 
   # Zonal statistic computation
   tmp <- exact_extract(x = rst, y = mun, fun = fun, progress = FALSE)
@@ -66,6 +73,9 @@ agg <- function(x, fun, tb_name) {
   return(TRUE)
 }
 
+cli_alert_success("Done!")
+
+cli_alert_info("Computing zonal mean...")
 # Compute zonal mean
 res_mean <- map(
   .x = files,
@@ -74,7 +84,9 @@ res_mean <- map(
   tb_name = "ndvi_mean",
   .progress = TRUE
 )
+cli_alert_success("Done!")
 
+cli_alert_info("Computing zonal max...")
 res_max <- map(
   .x = files,
   .f = agg,
@@ -82,7 +94,9 @@ res_max <- map(
   tb_name = "ndvi_max",
   .progress = TRUE
 )
+cli_alert_success("Done!")
 
+cli_alert_info("Computing zonal min...")
 res_min <- map(
   .x = files,
   .f = agg,
@@ -90,7 +104,9 @@ res_min <- map(
   tb_name = "ndvi_min",
   .progress = TRUE
 )
+cli_alert_success("Done!")
 
+cli_alert_info("Computing zonal sd...")
 res_sd <- map(
   .x = files,
   .f = agg,
@@ -98,7 +114,9 @@ res_sd <- map(
   tb_name = "ndvi_sd",
   .progress = TRUE
 )
+cli_alert_success("Done!")
 
+cli_alert_info("Exporting files...")
 # Export parquet file
 dbExecute(
   con,
@@ -140,6 +158,11 @@ dbExecute(
   con,
   "COPY (SELECT * FROM 'ndvi_sd') TO 'ndvi_sd.csv' (FORMAT 'CSV')"
 )
+cli_alert_success("Done!")
 
 # Database disconnect
+cli_alert_info("Disconnecting database...")
 dbDisconnect(conn = con)
+cli_alert_success("Done!")
+
+cli_h1("END")

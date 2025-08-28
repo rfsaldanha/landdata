@@ -22,7 +22,7 @@ files_a <- tibble(
   year = year(date),
   month = month(date)
 ) |>
-  filter(date >= ymd("1999-01-01") & date <= ymd("2019-12-01"))
+  filter(date >= ymd("1999-01-01") & date <= ymd("2019-12-31"))
 
 files_b <- tibble(
   files = list.files(path = files_path_b, full.names = TRUE, pattern = "*.nc"),
@@ -30,7 +30,7 @@ files_b <- tibble(
   year = year(date),
   month = month(date)
 ) |>
-  filter(date >= ymd("2020-01-01") & date <= ymd("2020-06-01"))
+  filter(date >= ymd("2020-01-01") & date <= ymd("2020-06-30"))
 
 files_c <- tibble(
   files = list.files(path = files_path_c, full.names = TRUE, pattern = "*.nc"),
@@ -82,11 +82,14 @@ for (l in 1:length(files_list)) {
     x = rst,
     mean,
     na.rm = TRUE,
-    cores = 6
+    cores = 4
   )
 
   # Write
   writeCDF(x = rst_time_avg, filename = dest_filename, compression = 9)
+
+  # Remove temp files from terra
+  tmpFiles(remove = TRUE)
 
   cli_alert_success("Done!")
 }
