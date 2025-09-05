@@ -35,7 +35,7 @@ cli_alert_success("Done!")
 cli_alert_info("Preparing environment...")
 
 # Folders
-monthly_data_folder <- "/media/raphaelsaldanha/seagate_ext_01/ndvi_time_agg/"
+monthly_data_folder <- "/media/raphaelsaldanha/lacie/ndvi_time_agg/"
 
 # List files
 files <- list.files(
@@ -113,7 +113,7 @@ cli_alert_info("Computing zonal sd...")
 res_sd <- map(
   .x = files,
   .f = agg,
-  fun = "sd",
+  fun = "stdev",
   tb_name = "ndvi_sd",
   .progress = TRUE
 )
