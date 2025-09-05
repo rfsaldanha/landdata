@@ -168,4 +168,7 @@ cli_alert_info("Disconnecting database...")
 dbDisconnect(conn = con)
 cli_alert_success("Done!")
 
+# Sync
+system("onedrive --sync")
+
 cli_h1("END")
