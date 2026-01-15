@@ -53,3 +53,4 @@ rsconnect/
 *.wal
 *.csv
 *.parquet
+*.nc
