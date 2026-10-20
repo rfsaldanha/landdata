@@ -33,13 +33,17 @@ geo_split <- geo |>
 
 # Land cover files
 land_cover_files <- tibble(
-  ano = 1985:2023,
+  ano = 1985:2025,
   file = sort(list.files(
     path = "/media/raphaelsaldanha/lacie/mapbiomas/cobertura/",
     full.names = TRUE,
     pattern = "\\.tif$"
   ))
 )
+
+# Only 2025
+land_cover_files <- land_cover_files |>
+  filter(ano == 2025)
 
 # Land cover codes
 land_cover_codes <- c(
