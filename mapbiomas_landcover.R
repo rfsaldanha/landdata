@@ -35,7 +35,8 @@ geo_split <- geo |>
 land_cover_files <- tibble(
   ano = 1985:2025,
   file = sort(list.files(
-    path = "/media/raphaelsaldanha/lacie/mapbiomas/cobertura/",
+    #path = "/media/raphaelsaldanha/lacie/mapbiomas/cobertura/",
+    path = "/dados2/data/mapbiomas/cobertura/",
     full.names = TRUE,
     pattern = "\\.tif$"
   ))
